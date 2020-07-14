@@ -9,10 +9,33 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-
+const data = {}
+const employeeObjects = [];
+const employeeId = employeeObjects.length+1;
+mainMenu();
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+function mainMenu() {
+    const response = inquirer
+    .prompt(questions)
+    .then(function (response) {
+        if (response.employeeType === "Manager") {
+            manager();
+        } else if (response.employeeType === "Engineer") {
+            engineer();
+        }
+        // created an object to save responses
+        // const data = {}
+        // data.name = response.name;
+        // data.role = response.role;
+        // data.id = response.id;
+        // data.officeId = response.officeId;
+        // data.github = response.github;
+        // data.school = response.license;
+
+    });
+}
 
 const questions = [
     {
@@ -22,7 +45,8 @@ const questions = [
         choices: [
             "Manager",
             "Engineer",
-            "Intern"
+            "Intern",
+            "No more employees"
         ]
     },
     {
@@ -42,51 +66,71 @@ const questions = [
     },
 ];
 
-const manager = [
+function manager() {
+    inquirier.prompt(managerQ)
+    .then(function(response) {
+        const newManager = new Manager (response.name, employeeId++, response.email, response.officeNumber);
+        employeeObjects.push(newManager);
+        mainMenu();
+    }) 
+}
+
+const managerQ = [
     {
         type: "input",
-        message: "Enter the office ID:",
-        name: "officeId",
-        when: (response) => response.employeeType === "Manager"
+        message: "Enter employee name:",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Enter employee role:",
+        name: "role"
+    },
+    {
+        type: "input",
+        message: "Enter the office number:",
+        name: "officeNumber"
     }
 ]
 
-const engineer = [
+const engineerQ = [
+    {
+        type: "input",
+        message: "Enter employee name:",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Enter employee role:",
+        name: "role"
+    },
     {
         type: "input",
         message: "Enter GitHub username:",
         name: "github",
-        when: (response) => response.employeeType === "Engineer"
     }
 ]
 
-const intern = [
+const internQ = [
+    {
+        type: "input",
+        message: "Enter employee name:",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Enter employee role:",
+        name: "role"
+    },
     {
         type: "input",
         message: "What university did they attend?",
         name: "school",
-        when: (response) => response.employeeType === "Intern"
     }
 ]
 
 // How do I define how many employees are on the roster? Do I ask one question at the begginning "How many employees including the manager are on the team?" OR at the end of the prompts, ask if they have another team member to add?
 
-function init() {
-    const response = inquirer
-    .prompt(questions)
-    .then(function (response) {
-        // created an object to save responses
-        const data = {}
-        data.name = response.name;
-        data.role = response.role;
-        data.id = response.id;
-        data.officeId = response.officeId;
-        data.github = response.github;
-        data.school = response.license;
-    });
-}
-
-const employeeObjects = [];
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
