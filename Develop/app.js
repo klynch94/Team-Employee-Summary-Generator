@@ -9,7 +9,6 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const data = {}
 const employeeObjects = [];
 const employeeId = employeeObjects.length+1;
 mainMenu();
@@ -24,16 +23,11 @@ function mainMenu() {
             manager();
         } else if (response.employeeType === "Engineer") {
             engineer();
+        } else if (response.employeeType === "Intern") {
+            intern();
+        } else if (response.employeeType === "No more employees") {
+            stop();
         }
-        // created an object to save responses
-        // const data = {}
-        // data.name = response.name;
-        // data.role = response.role;
-        // data.id = response.id;
-        // data.officeId = response.officeId;
-        // data.github = response.github;
-        // data.school = response.license;
-
     });
 }
 
@@ -48,22 +42,7 @@ const questions = [
             "Intern",
             "No more employees"
         ]
-    },
-    {
-        type: "input",
-        message: "Enter employee name:",
-        name: "name"
-    },
-    {
-        type: "input",
-        message: "Enter employee role:",
-        name: "role"
-    },
-    {
-        type: "input",
-        message: "Enter employee ID:",
-        name: "id"
-    },
+    }
 ];
 
 function manager() {
@@ -73,6 +52,28 @@ function manager() {
         employeeObjects.push(newManager);
         mainMenu();
     }) 
+}
+
+function engineer() {
+    inquirier.prompt(engineerQ)
+    .then(function(response) {
+        const newEngineer = new Engineer (response.name, employeeId++, response.email, response.github);
+        employeeObjects.push(newEngineer);
+        mainMenu();
+    }) 
+}
+
+function intern() {
+    inquirier.prompt(internQ)
+    .then(function(response) {
+        const newIntern = new Intern (response.name, employeeId++, response.email, response.school);
+        employeeObjects.push(newIntern);
+        mainMenu();
+    }) 
+}
+
+function stop() {
+    render(employeeObjects);
 }
 
 const managerQ = [
@@ -128,9 +129,6 @@ const internQ = [
         name: "school",
     }
 ]
-
-// How do I define how many employees are on the roster? Do I ask one question at the begginning "How many employees including the manager are on the team?" OR at the end of the prompts, ask if they have another team member to add?
-
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
