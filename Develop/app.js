@@ -17,20 +17,48 @@ const render = require("./lib/htmlRenderer");
 const questions = [
     {
         type: "input",
-        message: "Enter your project title..",
-        name: "projectName"
+        message: "Enter employee name:",
+        name: "name"
     },
     {
         type: "input",
-        message: "Provide a description of your project..",
-        name: "description"
+        message: "Enter employee role:",
+        name: "role"
     },
     {
         type: "input",
-        message: "Provide instructions on how to install the application..",
-        name: "installation"
+        message: "Enter employee ID:",
+        name: "id"
     },
 ];
+
+const manager = [
+    {
+        type: "input",
+        message: "Enter the office ID:",
+        name: "officeId"
+    }
+]
+
+const engineer = [
+    {
+        type: "input",
+        message: "Enter GitHub username:",
+        name: "github"
+    }
+]
+
+const intern = [
+    {
+        type: "input",
+        message: "What university did they attend?",
+        name: "school"
+    }
+]
+
+// How do I define how many employees are on the roster? Do I ask one question at the begginning "How many employees including the manager are on the team?" OR at the end of the prompts, ask if they have another team member to add?
+
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
