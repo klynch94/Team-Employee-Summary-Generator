@@ -10,13 +10,12 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 // created employee array and requiring the render function file
 const render = require("./lib/htmlRenderer");
 const employeeObjects = [];
-let employeeId = employeeObjects.length+1;
 
 // questions for inquirer to prompt user on employees
 const questions = [
     {
         type: "list",
-        message: "Type of employee:",
+        message: "Select an employee to add to your team. If there are no more employees, select 'no more employees.",
         name: "employeeType",
         choices: [
             "Manager",
@@ -39,6 +38,11 @@ const managerQ = [
     },
     {
         type: "input",
+        message: "Enter employee ID:",
+        name: "id"
+    },
+    {
+        type: "input",
         message: "Enter the office number:",
         name: "officeNumber"
     }
@@ -56,6 +60,11 @@ const engineerQ = [
     },
     {
         type: "input",
+        message: "Enter employee ID:",
+        name: "id"
+    },
+    {
+        type: "input",
         message: "Enter GitHub username:",
         name: "github",
     }
@@ -70,6 +79,11 @@ const internQ = [
         type: "input",
         message: "Enter employee email:",
         name: "email"
+    },
+    {
+        type: "input",
+        message: "Enter employee ID:",
+        name: "id"
     },
     {
         type: "input",
@@ -97,7 +111,7 @@ function mainMenu() {
 function manager() {
     inquirer.prompt(managerQ)
     .then(function(response) {
-        let newManager = new Manager (response.name, employeeId++, response.email, response.officeNumber);
+        let newManager = new Manager (response.name, response.id, response.email, response.officeNumber);
         employeeObjects.push(newManager);
         mainMenu();
     }) 
@@ -106,7 +120,7 @@ function manager() {
 function engineer() {
     inquirer.prompt(engineerQ)
     .then(function(response) {
-        let newEngineer = new Engineer (response.name, employeeId++, response.email, response.github);
+        let newEngineer = new Engineer (response.name, response.id, response.email, response.github);
         employeeObjects.push(newEngineer);
         mainMenu();
     }) 
@@ -115,7 +129,7 @@ function engineer() {
 function intern() {
     inquirer.prompt(internQ)
     .then(function(response) {
-        let newIntern = new Intern (response.name, employeeId++, response.email, response.school);
+        let newIntern = new Intern (response.name, response.id, response.email, response.school);
         employeeObjects.push(newIntern);
         mainMenu();
     }) 
