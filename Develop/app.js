@@ -4,17 +4,80 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-
+// paths to create new file
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
+// created employee array and requiring the render function file
 const render = require("./lib/htmlRenderer");
 const employeeObjects = [];
-const employeeId = employeeObjects.length+1;
-mainMenu();
+let employeeId = employeeObjects.length+1;
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+// questions for inquirer to prompt user on employees
+const questions = [
+    {
+        type: "list",
+        message: "Type of employee:",
+        name: "employeeType",
+        choices: [
+            "Manager",
+            "Engineer",
+            "Intern",
+            "No more employees"
+        ]
+    }
+];
+const managerQ = [
+    {
+        type: "input",
+        message: "Enter employee name:",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Enter employee email:",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "Enter the office number:",
+        name: "officeNumber"
+    }
+]
+const engineerQ = [
+    {
+        type: "input",
+        message: "Enter employee name:",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Enter employee email:",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "Enter GitHub username:",
+        name: "github",
+    }
+]
+const internQ = [
+    {
+        type: "input",
+        message: "Enter employee name:",
+        name: "name"
+    },
+    {
+        type: "input",
+        message: "Enter employee email:",
+        name: "email"
+    },
+    {
+        type: "input",
+        message: "What university did they attend?",
+        name: "school",
+    }
+]
+// function to initiate the program and begin the loop to prompt the user for team information
 function mainMenu() {
     const response = inquirer
     .prompt(questions)
@@ -30,131 +93,44 @@ function mainMenu() {
         }
     });
 }
-
-const questions = [
-    {
-        type: "list",
-        message: "Type of employee:",
-        name: "employeeType",
-        choices: [
-            "Manager",
-            "Engineer",
-            "Intern",
-            "No more employees"
-        ]
-    }
-];
-
+// function to create new Manager constructor and push into array
 function manager() {
-    inquirier.prompt(managerQ)
+    inquirer.prompt(managerQ)
     .then(function(response) {
-        const newManager = new Manager (response.name, employeeId++, response.email, response.officeNumber);
+        let newManager = new Manager (response.name, employeeId++, response.email, response.officeNumber);
         employeeObjects.push(newManager);
         mainMenu();
     }) 
 }
-
+// function to create new Engineer constructor and push into array
 function engineer() {
-    inquirier.prompt(engineerQ)
+    inquirer.prompt(engineerQ)
     .then(function(response) {
-        const newEngineer = new Engineer (response.name, employeeId++, response.email, response.github);
+        let newEngineer = new Engineer (response.name, employeeId++, response.email, response.github);
         employeeObjects.push(newEngineer);
         mainMenu();
     }) 
 }
-
+// function to create new Intern constructor and push into array
 function intern() {
-    inquirier.prompt(internQ)
+    inquirer.prompt(internQ)
     .then(function(response) {
-        const newIntern = new Intern (response.name, employeeId++, response.email, response.school);
+        let newIntern = new Intern (response.name, employeeId++, response.email, response.school);
         employeeObjects.push(newIntern);
         mainMenu();
     }) 
 }
-
+// function to stop the loop and render the created employees
 function stop() {
-    render(employeeObjects);
+    const team = render(employeeObjects);
+    writeFile(team);
 }
-
-const managerQ = [
-    {
-        type: "input",
-        message: "Enter employee name:",
-        name: "name"
-    },
-    {
-        type: "input",
-        message: "Enter employee role:",
-        name: "role"
-    },
-    {
-        type: "input",
-        message: "Enter the office number:",
-        name: "officeNumber"
-    }
-]
-
-const engineerQ = [
-    {
-        type: "input",
-        message: "Enter employee name:",
-        name: "name"
-    },
-    {
-        type: "input",
-        message: "Enter employee role:",
-        name: "role"
-    },
-    {
-        type: "input",
-        message: "Enter GitHub username:",
-        name: "github",
-    }
-]
-
-const internQ = [
-    {
-        type: "input",
-        message: "Enter employee name:",
-        name: "name"
-    },
-    {
-        type: "input",
-        message: "Enter employee role:",
-        name: "role"
-    },
-    {
-        type: "input",
-        message: "What university did they attend?",
-        name: "school",
-    }
-]
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-render(employeeObjects);
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-function writeFile() {
-    fs.writeFile(outputPath, variable, function (err) {
+// function to create and write the newly created file
+function writeFile(team) {
+    fs.writeFile(outputPath, team, function (err) {
         if (err) throw err;
         console.log("success!");
     })
 }
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+// Calling the function to initiate the program
+mainMenu();
