@@ -6,10 +6,10 @@ The application is a Command Line Application that is run on the terminal. It ut
 Below are some screenshots of how the application works and the finished output:
 
 First it prompts the user to add an employee:
-<img src="./develop/assets/firstprompt.png">
+<img src="./Develop/assets/firstprompt.png">
 
 It will then prompt the user to add another team member or select no more employees if it has been completed:
-<img src="./develop/assets/secondprompt.png">
+<img src="./Develop/assets/secondprompt.png">
 
 When the user has completed their team, an html is created with the team members:
-<img src="./develop/assets/output.example.png">
+<img src="./Develop/assets/output.example.png">
